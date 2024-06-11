@@ -22,9 +22,43 @@
     <script src="./static/js/bulma-carousel.min.js"></script>
     <script src="./static/js/bulma-slider.min.js"></script>
     <script src="./static/js/index.js"></script>
+
+    <style type="text/css">
+        #simulation-result-video {
+            width: 50%;
+            height: auto;
+        }
+    </style>
+
+    <script>
+        function init() {
+            const video = document.getElementById("simulation-result-video");
+            video.addEventListener("error", () => {
+                console.log("Error loading video: ", video.src), ". Setting default to none";
+                if(video.src.includes("undefined")) {
+                    console.log("Don't have an undefined version of the clip, just crash");
+                    return;
+                }
+                const method = document.getElementById("single-menu-methods").value;
+                const uri = "static/videos/simulation/" + method + "/undefined.mp4"
+                video.src = uri;
+                video.playbackRate = 1.75;
+                video.play();
+            }, true);
+        }
+        function updateSingleVideo() {
+            const task = document.getElementById("single-menu-tasks").value;
+            const method = document.getElementById("single-menu-methods").value;
+            const video = document.getElementById("simulation-result-video");
+            const uri = "static/videos/simulation/" + method + "/" + task + ".mp4"
+            video.src = uri;
+            video.playbackRate = 1.75;
+            video.play();
+        }
+    </script>
 </head>
 
-<body>
+<body onload="init(); updateSingleVideo();">
     <section class="hero">
         <div class="hero-body">
             <div class="container is-max-desktop">
@@ -38,6 +72,57 @@
             </div>
         </div>
     </section>
+
+    <!-- Simulation Results Visualizer -->
+    <section class="section">
+        <div class="container is-max-widescreen">
+            <div class="rows">
+                <div class="rows is-centered ">
+                    <div class="row is-full-width">
+                        <br/>
+                        <br/>
+                        <h2 class="title is-3">Simulation Results</h2>
+                        <div class="columns">
+                            <div class="column has-text-centered">
+                                Method
+                                <div class="select is-small">
+                                    <select id="single-menu-methods" onchange="updateSingleVideo()">
+                                        <option value="manipulate_anything" selected="selected">Manipulate Anything</option>
+                                        <option value="voxposer">Voxposer</option>
+                                        <option value="code_as_policies">Code as policies</option>
+                                        <option value="rlbench">Rlbench</option>
+                                    </select>
+                                </div>
+                                applied to task
+                                <div class="select is-small">
+                                    <select id="single-menu-tasks" onchange="updateSingleVideo()">
+                                        <option value="pick_and_lift" selected="selected">pick and lift</option>
+                                        <option value="close_box">close box</option>
+                                        <option value="lamp_on">lamp on</option>
+                                        <option value="open_box">open box</option>
+                                        <option value="open_jar">open jar</option>
+                                        <option value="open_wine">open wine</option>
+                                        <option value="pick_up_cup">pick up cup</option>
+                                        <option value="play_jenga">play jenga</option>
+                                        <option value="put_block">put block</option>
+                                        <option value="put_knife">put knife</option>
+                                        <option value="sort_mustard">sort mustard</option>
+                                        <option value="take_umbrella">take umbrella</option>
+                                    </select>
+                                </div>
+                                <br/>
+                                <br/>
+                                <video id="simulation-result-video" muted autoplay loop>
+                                    <source src="static/videos/simulation/manipulate_anything/pick_and_lift.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Simulation Results Visualizer -->
 
     <!-- Simulation Results -->
     <section class="hero is-light is-small">
