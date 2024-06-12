@@ -28,6 +28,10 @@
             width: 50%;
             height: auto;
         }
+        #peract-simulation-result-video {
+            width: 75%;
+            height: auto;
+        }
     </style>
 
     <script>
@@ -45,8 +49,22 @@
                 video.playbackRate = 1.75;
                 video.play();
             }, true);
+
+            const video_peract = document.getElementById("peract-simulation-result-video");
+            video_peract.addEventListener("error", () => {
+                console.log("Error loading video: ", video_peract.src), ". Setting default to none";
+                if(video_peract.src.includes("undefined")) {
+                    console.log("Don't have an undefined version of the clip, just crash");
+                    return;
+                }
+                const method = document.getElementById("peract-single-menu-methods").value;
+                const uri = "static/videos/simulation_peract/" + method + "/undefined.mp4"
+                video_peract.src = uri;
+                video_peract.playbackRate = 1.75;
+                video_peract.play();
+            }, true);
         }
-        function updateSingleVideo() {
+        function updateSimulationGeneratedDataVideo() {
             const task = document.getElementById("single-menu-tasks").value;
             const method = document.getElementById("single-menu-methods").value;
             const video = document.getElementById("simulation-result-video");
@@ -55,10 +73,20 @@
             video.playbackRate = 1.75;
             video.play();
         }
+        function updatePerActTrainedVideo() {
+            const task = document.getElementById("peract-single-menu-tasks").value;
+            const method = document.getElementById("peract-single-menu-methods").value;
+            const video = document.getElementById("peract-simulation-result-video");
+            const uri = "static/videos/simulation_peract/" + method + "/" + task + ".mp4"
+            video.src = uri;
+            video.playbackRate = 1.75;
+            video.play();
+
+        }
     </script>
 </head>
 
-<body onload="init(); updateSingleVideo();">
+<body onload="init(); updateSimulationGeneratedDataVideo();">
     <section class="hero">
         <div class="hero-body">
             <div class="container is-max-desktop">
@@ -117,8 +145,8 @@
                             <source src="static/videos/real_world/pick_cube.mp4" type="video/mp4">
                         </video>
                     </div>
-                    <div class="item item-ender">
-                        <video id="ender" autoplay muted loop>
+                    <div class="item item-pikachu">
+                        <video id="pikachu" autoplay muted loop>
                             <source src="static/videos/real_world/pick_up_cup.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -128,7 +156,7 @@
     </section>
     <!-- /Simulation Results -->
 
-    <!-- Simulation Results Visualizer -->
+    <!-- Simulation generated data -->
     <section class="section">
         <div class="container is-max-widescreen">
             <div class="rows">
@@ -136,12 +164,13 @@
                     <div class="row is-full-width">
                         <br/>
                         <br/>
-                        <h2 class="title is-3">Simulation Results</h2>
+                        <h2 class="title is-3">Simulation</h2>
                         <div class="columns">
                             <div class="column has-text-centered">
+                                <h3 class="title is-5">Generated data</h3>
                                 Method
                                 <div class="select is-small">
-                                    <select id="single-menu-methods" onchange="updateSingleVideo()">
+                                    <select id="single-menu-methods" onchange="updateSimulationGeneratedDataVideo()">
                                         <option value="manipulate_anything" selected="selected">Manipulate Anything</option>
                                         <option value="voxposer">Voxposer</option>
                                         <option value="code_as_policies">Code as policies</option>
@@ -150,7 +179,7 @@
                                 </div>
                                 applied to task
                                 <div class="select is-small">
-                                    <select id="single-menu-tasks" onchange="updateSingleVideo()">
+                                    <select id="single-menu-tasks" onchange="updateSimulationGeneratedDataVideo()">
                                         <option value="pick_and_lift" selected="selected">pick and lift</option>
                                         <option value="close_box">close box</option>
                                         <option value="lamp_on">lamp on</option>
@@ -177,7 +206,54 @@
             </div>
         </div>
     </section>
-    <!-- /Simulation Results Visualizer -->
+    <!-- /Simulation generated data -->
+
+    <!-- Simulation PERACT training -->
+    <section class="section">
+        <div class="container is-max-widescreen">
+            <div class="rows">
+                <div class="rows is-centered ">
+                    <div class="row is-full-width">
+                        <div class="columns">
+                            <div class="column has-text-centered">
+                                <h3 class="title is-5">Trained instance of PerAct</h3>
+                                Method
+                                <div class="select is-small">
+                                    <select id="peract-single-menu-methods" onchange="updatePerActTrainedVideo()">
+                                        <option value="manipulate_anything" selected="selected">Manipulate Anything</option>
+                                        <option value="rlbench">Rlbench</option>
+                                    </select>
+                                </div>
+                                with data for task
+                                <div class="select is-small">
+                                    <select id="peract-single-menu-tasks" onchange="updatePerActTrainedVideo()">
+                                        <option value="pick_and_lift" selected="selected">pick and lift</option>
+                                        <option value="close_box">close box</option>
+                                        <option value="lamp_on">lamp on</option>
+                                        <option value="open_box">open box</option>
+                                        <option value="open_jar">open jar</option>
+                                        <option value="open_wine">open wine</option>
+                                        <option value="pick_up_cup">pick up cup</option>
+                                        <option value="play_jenga">play jenga</option>
+                                        <option value="put_block">put block</option>
+                                        <option value="put_knife">put knife</option>
+                                        <option value="sort_mustard">sort mustard</option>
+                                        <option value="take_umbrella">take umbrella</option>
+                                    </select>
+                                </div>
+                                <br/>
+                                <br/>
+                                <video id="peract-simulation-result-video" muted autoplay loop>
+                                    <source src="static/videos/simulation_peract/rlbench/pick_and_lift.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Simulation PERACT training -->
 
     <!-- Footer -->
     <footer class="footer">
