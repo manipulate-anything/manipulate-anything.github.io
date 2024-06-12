@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
-tasks=("put_knife"
-       "take_umbrella"
+tasks=("close_box"
+       "open_jar"
+       "pick_up_cup"
+       "put_knife"
        "lamp_on"
        "open_wine"
        "play_jenga"
+       "sort_mustard"
        "open_box"
        "pick_and_lift"
        "put_block"
-       "sort_mustard")
+       "take_umbrella")
 
 for task in "${tasks[@]}"
 do
