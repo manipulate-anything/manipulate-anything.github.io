@@ -301,15 +301,17 @@
 
     <!-- Image MA_Framework -->
     <section class="section">
-        <div class="container is-max-desktop">
-            <div class="columns is-centered has-text-centered">
-                <div class="column is-four-fifths">
-                    <h2 class="title is-3">MA Framework</h2>
-                    <img src="static/images/img_manipulate_anything_framework.png" />
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Manipulate-Anything Framework</h2>
+                <img src="static/images/img_manipulate_anything_framework.png" />
+                <p class="caption">The process begins by inputting a scene representation and a natural language task instruction into a VLM, which identifies objects and determines sub-goals. For each sub-goal, we provide multi-view images, verification conditions, and task goals to the action generation module, producing a task-specific grasp pose or action code. This leads to a temporary goal state, assessed by the sub-goal verification module for error recovery. Once all sub-goals are achieved, we filter the trajectories to obtain successful demonstrations for downstream policy training.</p>
                 </div>
             </div>
         </div>
     </section>
+
     <!-- /Image MA_Framework -->
 
     <!-- Image MA_Action_Generation_Module -->
@@ -319,6 +321,8 @@
                 <div class="column is-four-fifths">
                     <h2 class="title is-3">Action Generation Module</h2>
                     <img src="static/images/img_action_generation_module.png" />
+                    <p class="caption">This module enables generation of two types of actions: object-centric and agent centric. For object-centric actions which require manipulation of an object, we leverage a foundation grasp model to generate all suitable grasps. Next, we leverage a VLM to detect the object from mult-view frames, and along with the candidate grasp poses and target subgoal, query the VLM to select the best view point. 
+  We filter and select the optimal grasp for the sub-goal. For more agent-centric actions, the view-point selection process is the same, and the goal is to output code representing the change in pose of the end-effector from the current frame.</p>
                 </div>
             </div>
         </div>
