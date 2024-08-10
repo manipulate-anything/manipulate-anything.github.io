@@ -1,0 +1,42 @@
+#MT_Selected_Viewpoint verification
+Selected_Viewpoint_Verification = {
+    "type": "text",
+    "text": (
+        f"The image depicts 2 frames of a robot manipulation scene concatenated, one frame being the past time-step and one being the current time-step observation. "
+        f"Each frame is annotated with a number on the top left corner of the image. "
+        f"The frame with number 1 annotated on the top left refers to the frame from the previous time-step, number 2 refers to the current time-step. "
+        f"If the two images are identical, then just use the number 1 frame to determine the verification condition. "
+        f"Evaluate the verification condition on whether it has been met by comparing the 2 frames."
+        f"verification condition: {next_verification}. "
+        f"Output should only be either Yes or No. "
+        f"If the answer is No, provide an explanation."
+    )
+}  
+
+#MT_Viewpoint verification
+content = """
+"type": "text",
+"text": f"There is a picture containing 5 frames of robot manipulation scene.",
+"text": f"All the frames are from the same time-step but different viewpoints.",
+"text": f"Each frame are annotated with a number on the top left corner of the image."
+"text": f"The frame with number 1 annotated on the top left refers to the wrist camera viewpoint, number 2 refers to the left viewpoint, number 3 refers to the front viewpoint, number 4 refers to the right viewpoint, and number 5 refers to the overhead viewpoint."
+"text": f"Output should only be either Yes or No."
+prompt query: 
+"""
+
+#SoM verification
+SoM = {
+    "type": "text",
+    "text": (
+        f"The image depicts a robot manipulation scene. "
+        f"There are numbers labelled on the images referring to a region of the image, and it is used for reasoning and evaluation. "
+        f"Given the list of selected numbers: {next_SoM}. "
+        f"Identify the objects in the selected numbers, and their relationship between each other. "
+        f"Using the selected numbers in the image, the previous reasoning and the verification condition to determine whether the verification condition has been succeed. "
+        f"Verification condition: {next_verification}. "
+        f"Output should only be either Yes or No. "
+        f"If the answer is No, provide an explanation."
+    )
+}
+
+
