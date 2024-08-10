@@ -1,0 +1,9 @@
+prompt="""
+    "type": "text",
+    "text": f"There is a picture containing 4 frames of a robot manipulation scene at the same time step but observed from different viewpoints.",
+    "text": f"Each frame are annotated with a number on the top left corner of the image, numbered from 0 to 3.",
+    "text": f"The frame with number 0 annotated on the top left refers to front viewpoint, number 1 refers to the wrist viewpoint, number 2 refers to the left shoulder viewpoint, and number 3 refers to the right shoulder viewpoint.",
+    "text": f"Evaluate the prompt query by comparing between all four frames.",
+    "text": f"Output should only be one number between only 0 to 3, and written in a list format."
+    prompt query: Pick one out of the four viewpoints that offer the clearest and least obstructed view for grasping onto green knife handle. 
+    """
