@@ -1,0 +1,156 @@
+
+elif state == 'retract':
+	action = obs['gripper_matrix']
+	action[:3, 3] = action[:3, 3] - self.cfg.eval.retract * action[:3, 2]
+	gripper_open = obs['gripper_open']
+	message = 'Retract'
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = obs['gripper_pose'][3:]
+
+       
+
+        
+
+elif state == 'press':
+	action = obs['gripper_matrix']
+	gripper_open = obs['gripper_open']
+	message = 'Retract'
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3] + 0.1 * action[:3, 2]
+	rot = obs['gripper_pose'][3:]
+
+
+elif state == 'rotatey':
+	action = obs['gripper_matrix']
+	gripper_open = 0  # Ensure the gripper remains closed
+
+	# Quaternion for 90-degree rotation around the y-axis
+	angle_y = np.radians(45)
+	cos_half_angle = np.cos(angle_y / 2)
+	sin_half_angle = np.sin(angle_y / 2)
+	rotation_quaternion = [cos_half_angle, 0, sin_half_angle, 0]  # Quaternion for rotation around the y-axis
+
+	# Apply the new transformation to the gripper
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = self.quaternion_multiply(obs['gripper_pose'][3:], rotation_quaternion)
+        
+
+
+elif state == 'sweep':
+	action = obs['gripper_matrix']
+	gripper_open = 0  # Ensure the gripper remains closed
+	# Handle special conditions if the previous state was also 'sweep'
+	if self.prev_state == 'sweep':
+	# Special handling code here (if needed)
+	pass
+
+	# Adjust translation for sweeping action
+	# Assuming the sweeping is along the x-axis or y-axis
+	sweep_direction = 'x'  # or 'y', based on the task requirement
+	sweep_amount = 0.1  # Define this in the configuration
+
+	if sweep_direction == 'x':
+	action[0, 3] += sweep_amount  # Modify x-coordinate for sweeping along x-axis
+	elif sweep_direction == 'y':
+	action[1, 3] += sweep_amount  # Modify y-coordinate for sweeping along y-axis
+
+	# Keeping the rotation constant
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = obs['gripper_pose'][3:]  # Rotation remains unchanged
+
+
+elif state == 'rotatez':
+	action = obs['gripper_matrix']
+	gripper_open = 0  # Ensure the gripper remains closed
+
+	# Quaternion for 45-degree yaw rotation
+	angle_z = np.radians(-60)
+	cos_half_angle = np.cos(angle_z / 2)
+	sin_half_angle = np.sin(angle_z / 2)
+	rotation_quaternion = [cos_half_angle, 0, 0, sin_half_angle]  # Quaternion for rotation around the z-axis
+
+	# Apply the new transformation to the gripper
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = self.quaternion_multiply(obs['gripper_pose'][3:], rotation_quaternion)
+        
+elif state == 'rotatex':
+	action = obs['gripper_matrix']
+	gripper_open = 0  # Ensure the gripper remains closed
+
+	# Quaternion for 45-degree rotation around the x-axis
+	angle_x = np.radians(45)
+	cos_half_angle = np.cos(angle_x / 2)
+	sin_half_angle = np.sin(angle_x / 2)
+	rotation_quaternion = [cos_half_angle, sin_half_angle, 0, 0]  # Quaternion for rotation around the x-axis
+
+	# Apply the new transformation to the gripper
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = self.quaternion_multiply(obs['gripper_pose'][3:], rotation_quaternion)
+
+elif state == 'success':
+	action = obs['gripper_matrix']
+	pred = np.array([
+	[-0.970757, 0, 0.240063, 0.278442],
+	[0, 1.0, 0, -0.008160],
+	[-0.240063, 0, -0.970757, 1.472001],
+	[0, 0, 0, 1]
+	])
+	gripper_open = 1
+	message = 'Double retract detected. Reset.'
+	# action[:3, 3] = action[:3, 3] - self.cfg.eval.retract * action[:3, 2]
+	# gripper_open = obs['gripper_open']
+	# message = 'Retract'
+	# pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = obs['gripper_pose'][3:]
+
+    
+    
+elif state == 'drop':
+	action = obs['gripper_matrix']
+	gripper_open = 1  # Open the gripper to drop the object
+
+	# No translation or rotation adjustment required for dropping
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]  # Current translation remains unchanged
+	rot = obs['gripper_pose'][3:] 
+
+elif state == 'close':
+	action = obs['gripper_matrix']
+	gripper_open = obs['gripper_open']  # Current state of the gripper
+
+	gripper_open = 1  # Ensure the gripper remains closed
+	action[1, 3] += 0.3
+	action[2, 3] += 0.1
+
+	# Quaternion for rotation around the y-axis
+	angle_x = np.radians(-45)
+	cos_half_angle = np.cos(angle_x / 2)
+	sin_half_angle = np.sin(angle_x / 2)
+	rotation_quaternion = [cos_half_angle, sin_half_angle, 0, 0]
+
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = self.quaternion_multiply(obs['gripper_pose'][3:], rotation_quaternion)
+        
+elif state == 'open':
+	action = obs['gripper_matrix']
+	gripper_open = obs['gripper_open']  # Current state of the gripper
+
+	angle_x = np.radians(45)
+	cos_half_angle = np.cos(angle_x / 2)
+	sin_half_angle = np.sin(angle_x / 2)
+	rotation_quaternion = [cos_half_angle, sin_half_angle, 0, 0]  # Quaternion for rotation around the x-axis
+
+
+	gripper_open = obs['gripper_open']  # Ensure the gripper remains closed
+	action[1, 3] -= 0.4
+	action[2, 3] += 0.3
+	pred = gripper_pose_from_rlbench(action)
+	trans = action[:3, 3]
+	rot = obs['gripper_pose'][3:] 
